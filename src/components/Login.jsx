@@ -43,7 +43,6 @@ const LAPTOP_SCREEN_STYLE =
 const LAPTOP_BASE_STYLE = "w-60 h-3 bg-slate-700 rounded-b-xl shadow-md";
 const BOOK_STACK_STYLE = "absolute -bottom-1 -left-4 flex flex-col gap-1";
 
-// Panneau Droit (Formulaire de connexion)
 const RIGHT_PANEL_STYLE = "p-8 sm:p-12 flex flex-col justify-center bg-white";
 const FORM_HEADER_STYLE = "text-center mb-6";
 const HEADING_STYLE = "text-2xl font-bold text-slate-800 tracking-tight";
@@ -93,23 +92,18 @@ export const Login = ({ onLoginSuccess }) => {
     e.preventDefault();
     setError(null);
     setLoading(true);
-
     try {
       const response = await fetch(`${API_URL}/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.message);
       }
-
       localStorage.setItem("token", data.token);
       localStorage.setItem("user", JSON.stringify(data.user));
-
       if (onLoginSuccess) {
         onLoginSuccess(data.token, data.user);
       }
@@ -119,7 +113,6 @@ export const Login = ({ onLoginSuccess }) => {
       setLoading(false);
     }
   };
-
   return (
     <div className={CONTAINER_STYLE}>
       <div className={DECORATIVE_CIRCLE_TOP}></div>
