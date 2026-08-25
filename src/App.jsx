@@ -2,6 +2,7 @@
 import React, { useState, useEffect } from "react";
 // import { Login } from "./components/Login";
 
+// --- AJOUT DES STYLES NÉCESSAIRES ---
 const CONTAINER_STYLE = "min-h-screen bg-slate-50 text-slate-800 font-sans flex"; // <-- 'flex' ajouté ici pour mettre la sidebar à gauche
 const NAV_STYLE =
   "bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm";
@@ -15,7 +16,14 @@ const LOGOUT_BTN_STYLE =
 
 const MAIN_CONTENT_STYLE = "max-w-7xl mx-auto p-6 flex-1";
 
+// --- IMPORTATION DES VUES ---
+import { Dashboard } from "./components/Dashboard";
+import { Courses } from "./components/Courses";
+
 export default function App() {
+  // AJOUT DE L'ÉTAT POUR GÉRER LES ONGLETS DE LA SIDEBAR
+  const [currentTab, setCurrentTab] = useState("courses");
+
   // 1. On FORGE un token factice pour le test
   // const [token, setToken] = useState(localStorage.getItem("token"));
   const [token, setToken] = useState("faux_token_de_test_sécurisé");
@@ -73,21 +81,44 @@ export default function App() {
           </div>
 
           <nav className="flex flex-col gap-1 text-sm font-medium">
-            <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg bg-blue-50 text-blue-600">
+            <button
+              onClick={() => setCurrentTab("dashboard")}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors cursor-pointer ${
+                currentTab === "dashboard"
+                  ? "bg-blue-50 text-blue-600 font-semibold"
+                  : "text-slate-600 hover:bg-slate-50"
+              }`}
+            >
               📊 Tableau de bord
-            </a>
-            <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50">
+            </button>
+            <button
+              onClick={() => setCurrentTab("students")}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer text-left"
+            >
               👥 Étudiants
-            </a>
-            <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50">
+            </button>
+            <button
+              onClick={() => setCurrentTab("courses")}
+              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-left transition-colors cursor-pointer ${
+                currentTab === "courses"
+                  ? "bg-blue-50 text-blue-600 font-semibold"
+                  : "text-slate-600 hover:bg-slate-50"
+              }`}
+            >
               📚 Cours
-            </a>
-            <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50">
+            </button>
+            <button
+              onClick={() => setCurrentTab("exams")}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer text-left"
+            >
               📝 Examens
-            </a>
-            <a href="#" className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50">
+            </button>
+            <button
+              onClick={() => setCurrentTab("stats")}
+              className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-slate-600 hover:bg-slate-50 transition-colors cursor-pointer text-left"
+            >
               📈 Statistiques
-            </a>
+            </button>
           </nav>
         </div>
 
@@ -123,7 +154,15 @@ export default function App() {
         <main className={MAIN_CONTENT_STYLE}>
           {user.role === "admin" ? (
             <div>
-              <h1 className="text-2xl font-bold mb-4">Admin Dashboard</h1>
+              {/* Affichage dynamique des modules reliés aux clics de la sidebar */}
+              {currentTab === "dashboard" && <Dashboard user={user} />}
+              {currentTab === "courses" && <Courses />}
+              {currentTab !== "dashboard" && currentTab !== "courses" && (
+                <div className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm">
+                  <h1 className="text-2xl font-bold mb-2 capitalize">{currentTab} Module</h1>
+                  <p className="text-sm text-slate-500">This section is currently under development.</p>
+                </div>
+              )}
             </div>
           ) : (
             <div>
