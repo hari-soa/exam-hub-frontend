@@ -13,18 +13,17 @@ import {
 
 export const Sidebar = ({ user, onLogout }) => {
   const menuItems = [
-    { name: "Tableau de bord", icon: LayoutDashboard, active: true },
-    { name: "Étudiants", icon: Users },
-    { name: "Cours", icon: BookOpen },
-    { name: "Examens", icon: FileCheck },
+    { name: "Dashboard", icon: LayoutDashboard, active: true },
+    { name: "Students", icon: Users },
+    { name: "Courses", icon: BookOpen },
+    { name: "Exams", icon: FileCheck },
     { name: "Questions", icon: HelpCircle },
-    { name: "Résultats", icon: BarChart3 },
+    { name: "Results", icon: BarChart3 },
   ];
 
   return (
     <aside className="w-64 bg-white border-r border-slate-100 flex flex-col justify-between p-4 z-20">
       <div>
-        {/* Logo */}
         <div className="flex items-center gap-3 px-3 py-2 mb-8">
           <div className="bg-blue-600 text-white p-2.5 rounded-2xl shadow-lg shadow-blue-500/10">
             <GraduationCap size={24} />
@@ -35,7 +34,6 @@ export const Sidebar = ({ user, onLogout }) => {
           </div>
         </div>
 
-        {/* Menu de navigation */}
         <nav className="space-y-1">
           {menuItems.map((item, index) => {
             const Icon = item.icon;
@@ -56,12 +54,11 @@ export const Sidebar = ({ user, onLogout }) => {
         </nav>
       </div>
 
-      {/* Bouton Déconnexion (Positionné en bas) */}
       <button
         onClick={onLogout}
         className="flex items-center gap-3.5 px-4 py-3 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-xl font-medium text-sm transition cursor-pointer"
       >
-        <LogOut size={18} /> Déconnexion
+        <LogOut size={18} /> Logout
       </button>
     </aside>
   );
