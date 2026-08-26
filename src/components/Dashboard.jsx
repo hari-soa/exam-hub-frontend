@@ -1,4 +1,3 @@
-// src/components/Dashboard.jsx
 import React from "react";
 import {
   Users,
@@ -12,7 +11,6 @@ import {
 } from "lucide-react";
 
 export const Dashboard = ({ user }) => {
-  // --- Données factices pour reproduire le contenu de la maquette ---
   const stats = [
     {
       title: "Étudiants",
@@ -96,7 +94,7 @@ export const Dashboard = ({ user }) => {
 
   return (
     <div className="space-y-6">
-      {/* 1. EN-TÊTE DU TABLEAU DE BORD */}
+      {}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold text-slate-900">Tableau de bord</h1>
@@ -113,7 +111,7 @@ export const Dashboard = ({ user }) => {
         </div>
       </div>
 
-      {/* 2. CARTES KPI / STATISTIQUES */}
+      {}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
         {stats.map((stat, idx) => {
           const Icon = stat.icon;
@@ -139,7 +137,7 @@ export const Dashboard = ({ user }) => {
         })}
       </div>
 
-      {/* 3. SECTION STATISTIQUES PAR UE (ANNEAU + DÉTAILS + BARRES) */}
+      {}
       <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="font-bold text-slate-800 text-base">
@@ -151,7 +149,7 @@ export const Dashboard = ({ user }) => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-          {/* Anneau SVG de pourcentage */}
+          {}
           <div className="lg:col-span-5 flex flex-col sm:flex-row items-center justify-center gap-6 p-4 rounded-xl bg-slate-50/50">
             <div className="relative w-36 h-36 flex items-center justify-center">
               <svg className="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
@@ -180,7 +178,7 @@ export const Dashboard = ({ user }) => {
               </div>
             </div>
 
-            {/* Infos de la matière sélectionnée */}
+            {}
             <div className="space-y-3 text-center sm:text-left">
               <div>
                 <div className="flex items-center justify-center sm:justify-start gap-2">
@@ -213,7 +211,7 @@ export const Dashboard = ({ user }) => {
             </div>
           </div>
 
-          {/* Barres de progression par UE */}
+          {}
           <div className="lg:col-span-7 space-y-3.5">
             {ueStats.map((item, i) => (
               <div key={i} className="flex items-center gap-4 text-xs">
@@ -247,7 +245,7 @@ export const Dashboard = ({ user }) => {
         </div>
       </div>
 
-      {/* 4. TABLEAU DES EXAMENS RÉCENTS */}
+      {}
       <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
         <div className="flex items-center justify-between">
           <h2 className="font-bold text-slate-800 text-base">Examens récents</h2>
