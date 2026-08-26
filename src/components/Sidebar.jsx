@@ -51,7 +51,7 @@ export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
           }`}
           style={{ minHeight: '100dvh' }}
       >
-        <div className="flex h-full flex-col p-5">
+        <div className="flex h-full flex-col p-4 sm:p-5">
           <div className="mb-6 flex items-center justify-between">
             <button
                 type="button"
@@ -61,12 +61,12 @@ export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
                 }}
                 className="flex items-center gap-3 text-left transition-opacity hover:opacity-80"
             >
-              <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-md shadow-blue-500/20">
+              <div className="flex h-10 w-10 sm:h-11 sm:w-11 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-md shadow-blue-500/20">
                 <GraduationCap className="h-5 w-5" />
               </div>
               <div>
                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Plateforme</p>
-                <h1 className="text-lg font-bold text-slate-800">Exam Hub</h1>
+                <h1 className="text-base sm:text-lg font-bold text-slate-800">Exam Hub</h1>
               </div>
             </button>
 
@@ -80,7 +80,7 @@ export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
             </button>
           </div>
 
-          <nav className="flex flex-1 flex-col gap-1.5 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-200">
+          <nav className="flex flex-1 flex-col gap-1.5 overflow-y-auto pr-1">
             {items.map(({ to, label, icon: Icon }) => (
                 <NavLink
                     key={to}
@@ -100,8 +100,8 @@ export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
                         {isActive && (
                             <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-blue-600" />
                         )}
-                        <Icon className="h-4 w-4" />
-                        <span>{label}</span>
+                        <Icon className="h-4 w-4 flex-shrink-0" />
+                        <span className="truncate">{label}</span>
                       </>
                   )}
                 </NavLink>
@@ -111,7 +111,7 @@ export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
           <div className="mt-6 space-y-3 pt-4 border-t border-slate-100">
             <div className="rounded-xl bg-slate-50 p-3 border border-slate-100">
               <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Session active</p>
-              <p className="mt-0.5 text-sm font-semibold text-slate-700">
+              <p className="mt-0.5 text-sm font-semibold text-slate-700 truncate">
                 {role === 'admin' ? 'Administrateur' : 'Étudiant'}
               </p>
             </div>
@@ -124,7 +124,7 @@ export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
                 }}
                 className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-600 transition-all hover:border-red-200 hover:bg-red-50 hover:text-red-600 active:scale-[0.98]"
             >
-              <LogOut className="h-4 w-4" />
+              <LogOut className="h-4 w-4 flex-shrink-0" />
               <span>Déconnexion</span>
             </button>
           </div>
