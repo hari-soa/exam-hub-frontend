@@ -73,6 +73,13 @@ export default function TopBar({ role, onMenuToggle }) {
     navigate('/login', { replace: true });
   };
 
+  const handleNotificationClick = (link) => {
+    setNotificationsOpen(false);
+    if (link) {
+      navigate(link);
+    }
+  };
+
   return (
       <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 px-4 py-3 backdrop-blur-sm md:px-8">
         <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4">
@@ -176,7 +183,12 @@ export default function TopBar({ role, onMenuToggle }) {
                     <div className="max-h-80 space-y-2 overflow-y-auto">
                       {notifications.length > 0 ? (
                           notifications.map((notification) => (
-                              <div key={notification.id} className="rounded-xl border border-slate-100 bg-slate-50 p-3 transition hover:bg-slate-100">
+                              <button
+                                  key={notification.id}
+                                  type="button"
+                                  onClick={() => handleNotificationClick(notification.link)}
+                                  className="w-full text-left rounded-xl border border-slate-100 bg-slate-50 p-3 transition hover:bg-blue-50/50 hover:border-blue-100 active:scale-[0.99]"
+                              >
                                 <div className="flex items-start gap-3">
                                   <div className={`mt-0.5 h-2.5 w-2.5 rounded-full ${notification.type === 'exam' ? 'bg-blue-500' : 'bg-slate-400'}`} />
                                   <div className="flex-1">
@@ -185,7 +197,7 @@ export default function TopBar({ role, onMenuToggle }) {
                                     <p className="mt-2 text-[10px] uppercase tracking-[0.12em] text-slate-400">{notification.time}</p>
                                   </div>
                                 </div>
-                              </div>
+                              </button>
                           ))
                       ) : (
                           <div className="rounded-xl border border-dashed border-slate-200 bg-slate-50 p-3 text-center text-sm text-slate-500">
