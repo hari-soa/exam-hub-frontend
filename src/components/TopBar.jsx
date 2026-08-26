@@ -1,6 +1,6 @@
-import { Bell, ChevronDown, Menu, Search, Sparkles, UserRound } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { Bell, ChevronDown, Menu, Search, Sparkles, UserRound } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { notificationsData } from '../data/mockData';
 
@@ -93,7 +93,7 @@ export default function TopBar({ role, onMenuToggle }) {
           </div>
 
           <div className="flex items-center gap-2 md:gap-3">
-            <div className="relative" ref={searchRef} >
+            <div className="relative" ref={searchRef}>
               <button
                   type="button"
                   onClick={() => {
