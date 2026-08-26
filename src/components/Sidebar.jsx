@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import {
   ArrowLeftRight,
   BookOpen,
@@ -27,10 +27,11 @@ const studentItems = [
 ];
 
 export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
+  const navigate = useNavigate();
   const items = role === 'admin' ? adminItems : studentItems;
   const open = Boolean(mobileOpen);
+  const homePath = role === 'admin' ? '/admin' : '/student';
 
-  // Écouteur de la touche Échap (Escape)
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === 'Escape' && open) {
@@ -51,9 +52,15 @@ export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
           style={{ minHeight: '100dvh' }}
       >
         <div className="flex h-full flex-col p-5">
-          {/* En-tête */}
           <div className="mb-6 flex items-center justify-between">
-            <div className="flex items-center gap-3">
+            <button
+                type="button"
+                onClick={() => {
+                  navigate(homePath);
+                  setMobileOpen(false);
+                }}
+                className="flex items-center gap-3 text-left transition-opacity hover:opacity-80"
+            >
               <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600 text-white shadow-md shadow-blue-500/20">
                 <GraduationCap className="h-5 w-5" />
               </div>
@@ -61,7 +68,7 @@ export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
                 <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Plateforme</p>
                 <h1 className="text-lg font-bold text-slate-800">Exam Hub</h1>
               </div>
-            </div>
+            </button>
 
             <button
                 type="button"
@@ -73,8 +80,7 @@ export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
             </button>
           </div>
 
-          {/* Navigation */}
-          <nav className="flex flex-1 flex-col gap-1.5 overflow-y-auto pr-1">
+          <nav className="flex flex-1 flex-col gap-1.5 overflow-y-auto pr-1 scrollbar-thin scrollbar-thumb-slate-200">
             {items.map(({ to, label, icon: Icon }) => (
                 <NavLink
                     key={to}
@@ -82,20 +88,26 @@ export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
                     end={to === '/admin' || to === '/student'}
                     onClick={() => setMobileOpen(false)}
                     className={({ isActive }) =>
-                        `flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200 ${
+                        `relative flex items-center gap-3 rounded-xl px-3.5 py-2.5 text-sm font-medium transition-all duration-200 ${
                             isActive
                                 ? 'bg-blue-50 text-blue-700 ring-1 ring-blue-100/80 font-semibold'
                                 : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
                         }`
                     }
                 >
-                  <Icon className="h-4 w-4" />
-                  <span>{label}</span>
+                  {({ isActive }) => (
+                      <>
+                        {isActive && (
+                            <span className="absolute left-0 top-2 bottom-2 w-1 rounded-r-full bg-blue-600" />
+                        )}
+                        <Icon className="h-4 w-4" />
+                        <span>{label}</span>
+                      </>
+                  )}
                 </NavLink>
             ))}
           </nav>
 
-          {/* Pied de page */}
           <div className="mt-6 space-y-3 pt-4 border-t border-slate-100">
             <div className="rounded-xl bg-slate-50 p-3 border border-slate-100">
               <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Session active</p>
