@@ -15,7 +15,7 @@ export default function TopBar({ role, onMenuToggle }) {
   const searchRef = useRef(null);
   const notifRef = useRef(null);
   const profileRef = useRef(null);
-  u
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (searchRef.current && !searchRef.current.contains(event.target)) {
