@@ -19,50 +19,14 @@ import StudentExams from "./pages/StudentExams";
 import StudentHistory from "./pages/StudentHistory";
 import StudentProfile from "./pages/StudentProfile";
 
-const CONTAINER_STYLE = "min-h-screen bg-slate-50 text-slate-800 font-sans flex"; // <-- 'flex' ajouté ici pour mettre la sidebar à gauche
-const NAV_STYLE = "bg-white border-b border-slate-200 px-6 py-4 flex items-center justify-between shadow-sm";
-const BRAND_STYLE = "text-xl font-bold text-slate-800 flex items-center gap-2";
-const BRAND_SPAN_STYLE = "text-blue-600";
-const USER_INFO_STYLE = "flex items-center gap-4 text-sm";
-const ROLE_BADGE_STYLE ="px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider";
-const LOGOUT_BTN_STYLE ="px-3 py-1.5 text-xs font-medium text-slate-600 hover:text-red-600 border border-slate-200 rounded-lg hover:border-red-200 transition-colors cursor-pointer";
 function getHomePath(role) {
   return role === "admin" ? "/admin" : "/student";
 }
 
 
-import { Dashboard } from "./components/Dashboard";
-import { Courses } from "./components/Courses";
-
-export default function App() {
-  const [currentTab, setCurrentTab] = useState("courses");
-  const [token, setToken] = useState("faux_token_de_test_sécurisé");
-
-  /*
-  const [user, setUser] = useState(() => {
-    const savedUser = localStorage.getItem("user");
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
-  */
-  const [user, setUser] = useState({
-    first_name: "Admin",
-    last_name: "Test",
-    role: "admin",
-  });
-  /*
-  useEffect(() => {
-    if (!token) {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      setUser(null);
-    }
-  }, [token]);
-  */
-
-  const handleLoginSuccess = (newToken, userData) => {
-    setToken(newToken);
-    setUser(userData);
-  };
+function AppRoutes() {
+  const navigate = useNavigate();
+  const { user, login, role } = useAuth();
 
   const handleLoginSuccess = (token, userData) => {
     login(token, userData);
