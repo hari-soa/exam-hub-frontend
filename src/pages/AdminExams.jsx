@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { CalendarClock, Lock, Unlock } from "lucide-react";
+import { CalendarClock, History, Lock, Unlock } from "lucide-react";
 import { adminExamList } from "../data/mockData";
 
 const statusStyles = {
@@ -17,11 +17,18 @@ const statusLabels = {
 export default function AdminExams() {
     return (
         <div className="space-y-6">
-            <div className="flex items-center justify-between gap-4">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
                     <p className="text-sm font-medium text-blue-600">Examens</p>
                     <h2 className="mt-1 text-3xl font-bold text-slate-800">Gestion des examens</h2>
                 </div>
+                <Link
+                    to="/admin/exams/history"
+                    className="inline-flex items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-all duration-200 hover:border-blue-200 hover:bg-blue-50/50 hover:text-blue-600 active:scale-95 cursor-pointer self-start sm:self-auto"
+                >
+                    <History className="h-4 w-4" />
+                    Voir l'historique
+                </Link>
             </div>
 
             <div className="grid gap-4">
@@ -58,7 +65,7 @@ export default function AdminExams() {
                                 </div>
                                 <Link
                                     to={`/admin/exams/${exam.id}/questions`}
-                                    className="flex-1 lg:flex-none inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-700 shadow-sm transition-all duration-200 hover:bg-slate-100 hover:text-slate-900 active:scale-95 cursor-pointer text-center"
+                                    className="flex-1 lg:flex-none inline-flex items-center justify-center rounded-xl border border-slate-200 bg-white px-3.5 py-2 text-xs sm:text-sm font-semibold text-slate-700 shadow-sm transition-all duration-200 hover:border-blue-200 hover:bg-blue-50/50 hover:text-blue-600 active:scale-95 cursor-pointer text-center"
                                 >
                                     Questions
                                 </Link>
