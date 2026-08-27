@@ -74,20 +74,20 @@ export default function TopBar({ role, onMenuToggle }) {
   };
 
   const handleNotificationClick = (link) => {
-    setNotificationsOpen(false);
     if (link) {
+      setNotificationsOpen(false);
       navigate(link);
     }
   };
 
   return (
-      <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 px-4 py-3 backdrop-blur-sm md:px-8">
-        <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
+      <header className="sticky top-0 z-30 border-b border-slate-200/80 bg-white/90 px-3 sm:px-4 py-2.5 sm:py-3 backdrop-blur-sm md:px-8">
+        <div className="mx-auto flex max-w-[1400px] items-center justify-between gap-2 sm:gap-4">
+          <div className="flex items-center gap-2 sm:gap-3">
             <button
                 type="button"
                 onClick={onMenuToggle}
-                className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700 transition hover:bg-slate-100 active:scale-95 md:hidden"
+                className="inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-700 transition hover:bg-slate-100 active:scale-95 md:hidden"
                 aria-label="Ouvrir le menu"
             >
               <Menu className="h-4 w-4" />
@@ -99,7 +99,7 @@ export default function TopBar({ role, onMenuToggle }) {
             </div>
           </div>
 
-          <div className="flex items-center gap-2 md:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-3">
             <div className="relative" ref={searchRef}>
               <button
                   type="button"
@@ -108,16 +108,16 @@ export default function TopBar({ role, onMenuToggle }) {
                     setNotificationsOpen(false);
                     setDropdownOpen(false);
                   }}
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-600 transition hover:bg-slate-100 active:scale-95"
+                  className="inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-600 transition hover:bg-slate-100 active:scale-95"
                   aria-label="Recherche globale"
               >
                 <Search className="h-4 w-4" />
               </button>
 
               {searchOpen && (
-                  <div className="absolute right-0 z-50 mt-2 w-80 rounded-2xl border border-slate-200 bg-white p-3 shadow-xl">
+                  <div className="fixed sm:absolute top-14 sm:top-auto right-4 sm:right-0 z-50 w-[calc(100vw-2rem)] sm:w-80 max-w-xs sm:max-w-none rounded-2xl border border-slate-200 bg-white p-3 shadow-xl">
                     <div className="flex items-center gap-2 rounded-xl border border-slate-200 bg-slate-50 px-3 py-2">
-                      <Search className="h-4 w-4 text-slate-400" />
+                      <Search className="h-4 w-4 text-slate-400 flex-shrink-0" />
                       <input
                           autoFocus
                           value={searchQuery}
@@ -140,8 +140,8 @@ export default function TopBar({ role, onMenuToggle }) {
                                   }}
                                   className="flex w-full items-center justify-between rounded-lg px-3 py-2 text-left text-sm text-slate-700 transition hover:bg-slate-100"
                               >
-                                <span>{item.label}</span>
-                                <span className="text-[10px] uppercase tracking-[0.12em] text-slate-400">Go</span>
+                                <span className="truncate">{item.label}</span>
+                                <span className="text-[10px] uppercase tracking-[0.12em] text-slate-400 ml-2">Go</span>
                               </button>
                           ))
                       ) : (
@@ -162,7 +162,7 @@ export default function TopBar({ role, onMenuToggle }) {
                     setDropdownOpen(false);
                     setSearchOpen(false);
                   }}
-                  className="relative inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-600 transition hover:bg-slate-100 active:scale-95"
+                  className="relative inline-flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-600 transition hover:bg-slate-100 active:scale-95"
                   aria-label="Notifications"
               >
                 <Bell className="h-4 w-4" />
@@ -172,7 +172,7 @@ export default function TopBar({ role, onMenuToggle }) {
               </button>
 
               {notificationsOpen && (
-                  <div className="absolute right-0 z-50 mt-2 w-80 rounded-2xl border border-slate-200 bg-white p-3 shadow-xl">
+                  <div className="fixed sm:absolute top-14 sm:top-auto right-4 sm:right-0 z-50 w-[calc(100vw-2rem)] sm:w-80 max-w-xs sm:max-w-none rounded-2xl border border-slate-200 bg-white p-3 shadow-xl">
                     <div className="mb-2 flex items-center justify-between px-1">
                       <p className="text-sm font-semibold text-slate-800">Notifications</p>
                       <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-semibold text-blue-700">
@@ -190,10 +190,10 @@ export default function TopBar({ role, onMenuToggle }) {
                                   className="w-full text-left rounded-xl border border-slate-100 bg-slate-50 p-3 transition hover:bg-blue-50/50 hover:border-blue-100 active:scale-[0.99]"
                               >
                                 <div className="flex items-start gap-3">
-                                  <div className={`mt-0.5 h-2.5 w-2.5 rounded-full ${notification.type === 'exam' ? 'bg-blue-500' : 'bg-slate-400'}`} />
-                                  <div className="flex-1">
-                                    <p className="text-sm font-semibold text-slate-800">{notification.title}</p>
-                                    <p className="mt-1 text-xs text-slate-600">{notification.message}</p>
+                                  <div className={`mt-1 h-2.5 w-2.5 rounded-full flex-shrink-0 ${notification.type === 'exam' ? 'bg-blue-500' : 'bg-slate-400'}`} />
+                                  <div className="flex-1 min-w-0">
+                                    <p className="text-sm font-semibold text-slate-800 truncate">{notification.title}</p>
+                                    <p className="mt-1 text-xs text-slate-600 line-clamp-2">{notification.message}</p>
                                     <p className="mt-2 text-[10px] uppercase tracking-[0.12em] text-slate-400">{notification.time}</p>
                                   </div>
                                 </div>
@@ -213,20 +213,20 @@ export default function TopBar({ role, onMenuToggle }) {
               <button
                   type="button"
                   onClick={() => setDropdownOpen((v) => !v)}
-                  className="flex items-center gap-3 rounded-xl border border-slate-200 bg-white px-2 py-1.5 text-left transition hover:bg-slate-50 active:scale-[0.98]"
+                  className="flex items-center gap-2 sm:gap-3 rounded-xl border border-slate-200 bg-white p-1.5 sm:px-2 sm:py-1.5 text-left transition hover:bg-slate-50 active:scale-[0.98]"
               >
-                <div className="flex h-9 w-9 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700">
+                <div className="flex h-8 w-8 sm:h-9 sm:w-9 items-center justify-center rounded-full bg-blue-100 text-xs font-bold text-blue-700 flex-shrink-0">
                   {initials || <UserRound className="h-4 w-4" />}
                 </div>
                 <div className="hidden sm:block">
-                  <div className="text-sm font-semibold text-slate-900">{displayName}</div>
+                  <div className="text-sm font-semibold text-slate-900 truncate max-w-[120px]">{displayName}</div>
                   <div className="text-[11px] text-slate-500">{roleLabel}</div>
                 </div>
-                <ChevronDown className="h-4 w-4 text-slate-500" />
+                <ChevronDown className="h-4 w-4 text-slate-500 flex-shrink-0" />
               </button>
 
               {dropdownOpen && (
-                  <div className="absolute right-0 z-50 mt-2 w-52 rounded-xl border border-slate-200 bg-white p-2 shadow-lg">
+                  <div className="absolute right-0 z-50 mt-2 w-48 sm:w-52 rounded-xl border border-slate-200 bg-white p-2 shadow-lg">
                     <button
                         type="button"
                         onClick={() => {
