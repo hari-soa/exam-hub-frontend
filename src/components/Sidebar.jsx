@@ -13,17 +13,17 @@ import {
 } from 'lucide-react';
 
 const adminItems = [
-  { to: '/admin', label: 'Tableau de bord', icon: LayoutDashboard },
-  { to: '/admin/students', label: 'Étudiants', icon: Users },
-  { to: '/admin/cours', label: 'Cours', icon: BookOpen },
-  { to: '/admin/exams', label: 'Examens', icon: ClipboardList },
-  { to: '/admin/profile', label: 'Profil', icon: UserCircle2 },
+  { to: '/admin', label: 'Dashboard', icon: LayoutDashboard },
+  { to: '/admin/students', label: 'Students', icon: Users },
+  { to: '/admin/cours', label: 'Courses', icon: BookOpen },
+  { to: '/admin/exams', label: 'Exams', icon: ClipboardList },
+  { to: '/admin/profile', label: 'Profile', icon: UserCircle2 },
 ];
 
 const studentItems = [
-  { to: '/student', label: 'Examens', icon: ClipboardList },
-  { to: '/student/results', label: 'Historique', icon: ArrowLeftRight },
-  { to: '/student/profile', label: 'Profil', icon: UserCircle2 },
+  { to: '/student', label: 'Exams', icon: ClipboardList },
+  { to: '/student/results', label: 'History', icon: ArrowLeftRight },
+  { to: '/student/profile', label: 'Profile', icon: UserCircle2 },
 ];
 
 export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
@@ -73,7 +73,7 @@ export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
                   <GraduationCap className="h-5 w-5 transition-transform duration-200 group-hover:scale-110" />
                 </div>
                 <div>
-                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Plateforme</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-slate-400">Platform</p>
                   <h1 className="text-base sm:text-lg font-bold text-slate-800 group-hover:text-blue-600 transition-colors duration-200">Exam Hub</h1>
                 </div>
               </button>
@@ -82,7 +82,7 @@ export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
                   type="button"
                   onClick={() => setMobileOpen(false)}
                   className="inline-flex h-9 w-9 items-center justify-center rounded-xl border border-slate-200 bg-slate-50 text-slate-500 hover:bg-slate-100 hover:text-slate-700 hover:border-slate-300 transition-all duration-200 active:scale-95 cursor-pointer md:hidden"
-                  aria-label="Fermer le menu"
+                  aria-label="Close menu"
               >
                 <X className="h-4 w-4" />
               </button>
@@ -118,9 +118,9 @@ export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
 
             <div className="mt-6 space-y-3 pt-4 border-t border-slate-100">
               <div className="rounded-xl bg-slate-50 p-3 border border-slate-100 transition-colors duration-200 hover:bg-slate-100/70 hover:border-slate-200">
-                <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Session active</p>
+                <p className="text-[11px] font-medium text-slate-400 uppercase tracking-wider">Active Session</p>
                 <p className="mt-0.5 text-sm font-semibold text-slate-700 truncate">
-                  {role === 'admin' ? 'Administrateur' : 'Étudiant'}
+                  {role === 'admin' ? 'Administrator' : 'Student'}
                 </p>
               </div>
 
@@ -133,7 +133,7 @@ export function Sidebar({ role, onLogout, mobileOpen, setMobileOpen }) {
                   className="flex w-full items-center justify-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2.5 text-sm font-medium text-slate-600 transition-all duration-200 hover:border-red-200 hover:bg-red-50 hover:text-red-600 hover:shadow-sm active:scale-[0.98] cursor-pointer"
               >
                 <LogOut className="h-4 w-4 flex-shrink-0" />
-                <span>Déconnexion</span>
+                <span>Log Out</span>
               </button>
             </div>
           </div>
