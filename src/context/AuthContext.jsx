@@ -1,83 +1,70 @@
-import { createContext, useContext, useMemo, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from 'react';
 
 const AuthContext = createContext(null);
 
-const bypassEnabled = import.meta.env.VITE_BYPASS_AUTH === "true";
-const defaultBypassRole = import.meta.env.VITE_BYPASS_ROLE || "admin";
+export const AuthProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [role, setRole] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
-const buildMockUser = (role) => ({
-  id: role === "admin" ? "ADM-1024" : "STD-2089",
-  name: role === "admin" ? "Dr. Amina Kaci" : "Nassim Bensaid",
-  email: role === "admin" ? "admin@examhub.fr" : "nassim.bensaid@campus.fr",
-  role,
-  avatar: role === "admin" ? "AK" : "NB",
-});
+  useEffect(() => {
+    const bypassAuth = import.meta.env.VITE_BYPASS_AUTH === 'true';
+    const bypassRole = import.meta.env.VITE_BYPASS_ROLE || 'student';
 
-export function AuthProvider({ children }) {
-  const [user, setUser] = useState(() => {
-    if (bypassEnabled) {
-      return buildMockUser(defaultBypassRole);
+    if (bypassAuth) {
+      const mockUser = {
+        id: 'user-mock-123',
+        name: bypassRole === 'admin' ? 'Admin Principal' : 'Nassim Bensaid',
+        email: bypassRole === 'admin' ? 'admin@examhub.edu' : 'nassim.bensaid@campus.fr',
+        role: bypassRole
+      };
+      setUser(mockUser);
+      setRole(bypassRole);
+      setIsLoading(false);
+      return;
     }
 
-    const savedUser = typeof window !== "undefined" ? localStorage.getItem("examhub_user") : null;
-    return savedUser ? JSON.parse(savedUser) : null;
-  });
+    const storedUser = localStorage.getItem('user') || localStorage.getItem('examhub_user');
+    const storedToken = localStorage.getItem('token') || localStorage.getItem('examhub_token');
 
-  const [token, setToken] = useState(() => {
-    if (bypassEnabled) {
-      return "bypass-token";
+    if (storedUser && storedToken) {
+      const parsedUser = JSON.parse(storedUser);
+      setUser(parsedUser);
+      setRole(parsedUser.role);
     }
-    return typeof window !== "undefined" ? localStorage.getItem("examhub_token") || "" : "";
-  });
+    setIsLoading(false);
+  }, []);
 
-  const login = (newToken, userData) => {
-    setToken(newToken);
+  // login() ne fait plus d'appel API : le token et l'utilisateur
+  // sont déjà obtenus par Login.jsx via api.post('/auth/login', ...).
+  // Ici on se contente de stocker le résultat et de mettre à jour l'état.
+  const login = (token, userData) => {
+    localStorage.setItem('token', token);
+    localStorage.setItem('examhub_token', token);
+    localStorage.setItem('user', JSON.stringify(userData));
+    localStorage.setItem('examhub_user', JSON.stringify(userData));
     setUser(userData);
-    localStorage.setItem("examhub_token", newToken);
-    localStorage.setItem("examhub_user", JSON.stringify(userData));
-  };
-
-  const updateUser = (updates) => {
-    setUser((current) => {
-      const nextUser = current ? { ...current, ...updates } : updates;
-
-      if (nextUser && typeof window !== "undefined") {
-        localStorage.setItem("examhub_user", JSON.stringify(nextUser));
-      }
-
-      return nextUser;
-    });
+    setRole(userData.role);
   };
 
   const logout = () => {
-    setToken("");
+    localStorage.removeItem('token');
+    localStorage.removeItem('examhub_token');
+    localStorage.removeItem('user');
+    localStorage.removeItem('examhub_user');
     setUser(null);
-    localStorage.removeItem("examhub_token");
-    localStorage.removeItem("examhub_user");
+    setRole(null);
   };
 
-  const value = useMemo(
-    () => ({
-      user,
-      token,
-      role: user?.role ?? null,
-      isBypass: bypassEnabled,
-      login,
-      updateUser,
-      logout,
-    }),
-    [user, token],
-  );
-
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
+  if (isLoading) {
+    return <div className="min-h-screen flex items-center justify-center bg-slate-50">Chargement...</div>;
   }
 
-  return context;
-}
+  return (
+    <AuthContext.Provider value={{ user, role, login, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
+
+export const useAuth = () => useContext(AuthContext);
