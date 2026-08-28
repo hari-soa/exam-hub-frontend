@@ -1,91 +1,44 @@
-import React from "react";
-import { BrowserRouter, Navigate, Outlet, Route, Routes, useNavigate } from "react-router-dom";
-import AppLayout from "./layouts/AppLayout";
-import { AuthProvider, useAuth } from "./context/AuthContext";
-import { Login } from "./components/Login";
-import ProtectedRoute from "./components/ProtectedRoute";
-import AdminCourseDetail from "./pages/AdminCourseDetail";
-import AdminCourses from "./pages/AdminCourses";
-import AdminDashboard from "./pages/AdminDashboard";
-import AdminExamHistory from "./pages/AdminExamHistory";
-import AdminExams from "./pages/AdminExams";
-import AdminResults from "./pages/AdminResults";
-import AdminStudents from "./pages/AdminStudents";
-import ExamQuestionsEditor from "./pages/ExamQuestionsEditor";
-import AdminProfile from "./pages/AdminProfile";
-import StudentExamResult from "./pages/StudentExamResult";
-import StudentExamTaking from "./pages/StudentExamTaking";
-import StudentExams from "./pages/StudentExams";
-import StudentHistory from "./pages/StudentHistory";
-import StudentProfile from "./pages/StudentProfile";
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { AuthProvider } from './context/AuthContext';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
-function getHomePath(role) {
-  return role === "admin" ? "/admin" : "/student";
-}
+import Login from './pages/Login';
+import AdminDashboard from './pages/AdminDashboard';
+import AdminStudents from './pages/AdminStudents';
+import AdminCourses from './pages/AdminCourses';
+import AdminExams from './pages/AdminExams';
+import AdminQuestions from './pages/AdminQuestions';
+import AdminResults from './pages/AdminResults';
 
-
-function AppRoutes() {
-  const navigate = useNavigate();
-  const { user, login, role } = useAuth();
-
-  const handleLoginSuccess = (token, userData) => {
-    login(token, userData);
-    navigate(getHomePath(userData?.role), { replace: true });
-  };
-
-  return (
-    <Routes>
-      <Route path="/" element={<Navigate to={user ? getHomePath(role) : "/login"} replace />} />
-      <Route
-        path="/login"
-        element={user ? <Navigate to={getHomePath(role)} replace /> : <Login onLoginSuccess={handleLoginSuccess} />}
-      />
-
-      <Route
-        path="/admin"
-        element={
-          <ProtectedRoute role="admin">
-            <AppLayout role="admin" />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<AdminDashboard />} />
-        <Route path="students" element={<AdminStudents />} />
-        <Route path="cours" element={<AdminCourses />} />
-        <Route path="cours/:courseId" element={<AdminCourseDetail />} />
-        <Route path="profile" element={<AdminProfile />} />
-        <Route path="exams" element={<AdminExams />} />
-        <Route path="exams/history" element={<AdminExamHistory />} />
-        <Route path="exams/:examId/questions" element={<ExamQuestionsEditor />} />
-        <Route path="exams/:examId/results" element={<AdminResults />} />
-      </Route>
-
-      <Route
-        path="/student"
-        element={
-          <ProtectedRoute role="student">
-            <AppLayout role="student" />
-          </ProtectedRoute>
-        }
-      >
-        <Route index element={<StudentExams />} />
-        <Route path="exams/:examId" element={<StudentExamTaking />} />
-        <Route path="exams/:examId/result" element={<StudentExamResult />} />
-        <Route path="results" element={<StudentHistory />} />
-        <Route path="profile" element={<StudentProfile />} />
-      </Route>
-
-      <Route path="*" element={<Navigate to={user ? getHomePath(role) : "/login"} replace />} />
-    </Routes>
-  );
-}
+import StudentExams from './pages/StudentExams';
+import StudentTakeExam from './pages/StudentTakeExam';
+import StudentExamResult from './pages/StudentExamResult';
+import StudentHistory from './pages/StudentHistory';
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <AppRoutes />
-      </AuthProvider>
-    </BrowserRouter>
+    <AuthProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          
+          {/* Admin Routes */}
+          <Route path="/admin" element={<ProtectedRoute role="admin"><AdminDashboard /></ProtectedRoute>} />
+          <Route path="/admin/students" element={<ProtectedRoute role="admin"><AdminStudents /></ProtectedRoute>} />
+          <Route path="/admin/courses" element={<ProtectedRoute role="admin"><AdminCourses /></ProtectedRoute>} />
+          <Route path="/admin/exams" element={<ProtectedRoute role="admin"><AdminExams /></ProtectedRoute>} />
+          <Route path="/admin/exams/:id/questions" element={<ProtectedRoute role="admin"><AdminQuestions /></ProtectedRoute>} />
+          <Route path="/admin/exams/:id/results" element={<ProtectedRoute role="admin"><AdminResults /></ProtectedRoute>} />
+
+          {/* Student Routes */}
+          <Route path="/student" element={<ProtectedRoute role="student"><StudentExams /></ProtectedRoute>} />
+          <Route path="/student/exams/:id" element={<ProtectedRoute role="student"><StudentTakeExam /></ProtectedRoute>} />
+          <Route path="/student/exams/:id/result" element={<ProtectedRoute role="student"><StudentExamResult /></ProtectedRoute>} />
+          <Route path="/student/results" element={<ProtectedRoute role="student"><StudentHistory /></ProtectedRoute>} />
+
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </BrowserRouter>
+    </AuthProvider>
   );
 }
