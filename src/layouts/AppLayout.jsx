@@ -8,7 +8,6 @@ export default function AppLayout({ role }) {
   const { logout } = useAuth();
   const [mobileSidebarOpen, setMobileSidebarOpen] = useState(false);
 
-  // 1. MODIFICATION : Empêcher le scroll du body quand le menu mobile est ouvert
   useEffect(() => {
     if (mobileSidebarOpen) {
       document.body.style.overflow = 'hidden';
@@ -16,7 +15,6 @@ export default function AppLayout({ role }) {
       document.body.style.overflow = 'unset';
     }
 
-    // Nettoyage si le composant est démonté
     return () => {
       document.body.style.overflow = 'unset';
     };
