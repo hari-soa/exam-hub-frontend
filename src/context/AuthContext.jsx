@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const AuthContext = createContext(null);
 
@@ -8,15 +8,18 @@ export const AuthProvider = ({ children }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const bypassAuth = import.meta.env.VITE_BYPASS_AUTH === 'true';
-    const bypassRole = import.meta.env.VITE_BYPASS_ROLE || 'student';
+    const bypassAuth = import.meta.env.VITE_BYPASS_AUTH === "true";
+    const bypassRole = import.meta.env.VITE_BYPASS_ROLE || "student";
 
     if (bypassAuth) {
       const mockUser = {
-        id: 'user-mock-123',
-        name: bypassRole === 'admin' ? 'Admin Principal' : 'Nassim Bensaid',
-        email: bypassRole === 'admin' ? 'admin@examhub.edu' : 'nassim.bensaid@campus.fr',
-        role: bypassRole
+        id: "user-mock-123",
+        name: bypassRole === "admin" ? "Admin Principal" : "Nassim Bensaid",
+        email:
+          bypassRole === "admin"
+            ? "admin@examhub.edu"
+            : "nassim.bensaid@campus.fr",
+        role: bypassRole,
       };
       setUser(mockUser);
       setRole(bypassRole);
@@ -24,8 +27,10 @@ export const AuthProvider = ({ children }) => {
       return;
     }
 
-    const storedUser = localStorage.getItem('user') || localStorage.getItem('examhub_user');
-    const storedToken = localStorage.getItem('token') || localStorage.getItem('examhub_token');
+    const storedUser =
+      localStorage.getItem("user") || localStorage.getItem("examhub_user");
+    const storedToken =
+      localStorage.getItem("token") || localStorage.getItem("examhub_token");
 
     if (storedUser && storedToken) {
       const parsedUser = JSON.parse(storedUser);
@@ -35,29 +40,30 @@ export const AuthProvider = ({ children }) => {
     setIsLoading(false);
   }, []);
 
-  // login() ne fait plus d'appel API : le token et l'utilisateur
-  // sont déjà obtenus par Login.jsx via api.post('/auth/login', ...).
-  // Ici on se contente de stocker le résultat et de mettre à jour l'état.
   const login = (token, userData) => {
-    localStorage.setItem('token', token);
-    localStorage.setItem('examhub_token', token);
-    localStorage.setItem('user', JSON.stringify(userData));
-    localStorage.setItem('examhub_user', JSON.stringify(userData));
+    localStorage.setItem("token", token);
+    localStorage.setItem("examhub_token", token);
+    localStorage.setItem("user", JSON.stringify(userData));
+    localStorage.setItem("examhub_user", JSON.stringify(userData));
     setUser(userData);
     setRole(userData.role);
   };
 
   const logout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('examhub_token');
-    localStorage.removeItem('user');
-    localStorage.removeItem('examhub_user');
+    localStorage.removeItem("token");
+    localStorage.removeItem("examhub_token");
+    localStorage.removeItem("user");
+    localStorage.removeItem("examhub_user");
     setUser(null);
     setRole(null);
   };
 
   if (isLoading) {
-    return <div className="min-h-screen flex items-center justify-center bg-slate-50">Chargement...</div>;
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-slate-50">
+        Chargement...
+      </div>
+    );
   }
 
   return (

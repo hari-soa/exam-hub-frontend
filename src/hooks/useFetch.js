@@ -9,7 +9,6 @@ export default function useFetch(endpoint) {
   const { logout } = useAuth();
 
   const fetchData = useCallback(async () => {
-    // Si aucun endpoint n'est passé, on ne fait rien
     if (!endpoint) {
       setLoading(false);
       return;
@@ -19,20 +18,18 @@ export default function useFetch(endpoint) {
     setError(null);
 
     try {
-      // Normalise le chemin pour s'assurer qu'il commence par "/"
-      const formattedEndpoint = endpoint.startsWith("/") ? endpoint : `/${endpoint}`;
-      
+      const formattedEndpoint = endpoint.startsWith("/")
+        ? endpoint
+        : `/${endpoint}`;
+
       const response = await api.get(formattedEndpoint);
       setData(response.data);
     } catch (err) {
-      // La déconnexion 401 est déjà gérée globalement par l'intercepteur Axios dans client.js,
-      // mais on appelle aussi logout() de AuthContext si disponible
       if (err.response?.status === 401 && typeof logout === "function") {
         logout();
       }
 
-      const errorMessage =
-        err.response?.data?.message || err.message || "Une erreur est survenue.";
+      const errorMessage = err.response?.data?.message || err.message;
       setError(errorMessage);
     } finally {
       setLoading(false);

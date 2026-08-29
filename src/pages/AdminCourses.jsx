@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 import { BookOpen, CheckCircle2, Clock3, Swords, Loader2 } from "lucide-react";
-import useFetch from "../hooks/useFetch"; // Ajustez le chemin selon l'emplacement de votre fichier useFetch
+import useFetch from "../hooks/useFetch";
 
 const statusStyles = {
   completed: "bg-emerald-100 text-emerald-700",
@@ -24,14 +24,17 @@ export default function AdminCourses() {
 
   const filteredCourses = useMemo(() => {
     return courses.filter((course) => {
-      const matchesSemester = semester === "all" || course.semester === semester;
+      const matchesSemester =
+        semester === "all" || course.semester === semester;
       const matchesStatus = status === "all" || course.status === status;
       return matchesSemester && matchesStatus;
     });
   }, [courses, semester, status]);
 
   const uniqueSemesters = useMemo(() => {
-    return [...new Set(courses.map((course) => course.semester).filter(Boolean))];
+    return [
+      ...new Set(courses.map((course) => course.semester).filter(Boolean)),
+    ];
   }, [courses]);
 
   const stats = useMemo(() => {
@@ -69,7 +72,9 @@ export default function AdminCourses() {
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-sm font-medium text-blue-600">Cours</p>
-          <h2 className="mt-1 text-3xl font-bold text-slate-800">Gestion des cours</h2>
+          <h2 className="mt-1 text-3xl font-bold text-slate-800">
+            Gestion des cours
+          </h2>
         </div>
       </div>
 
@@ -77,29 +82,45 @@ export default function AdminCourses() {
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <p className="text-sm text-slate-500">Total cours</p>
           <div className="mt-3 flex items-center justify-between">
-            <span className="text-3xl font-bold text-slate-800">{stats.total}</span>
-            <div className="rounded-xl bg-blue-100 p-2 text-blue-600"><BookOpen className="h-5 w-5" /></div>
+            <span className="text-3xl font-bold text-slate-800">
+              {stats.total}
+            </span>
+            <div className="rounded-xl bg-blue-100 p-2 text-blue-600">
+              <BookOpen className="h-5 w-5" />
+            </div>
           </div>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <p className="text-sm text-slate-500">Terminés</p>
           <div className="mt-3 flex items-center justify-between">
-            <span className="text-3xl font-bold text-slate-800">{stats.completed}</span>
-            <div className="rounded-xl bg-emerald-100 p-2 text-emerald-600"><CheckCircle2 className="h-5 w-5" /></div>
+            <span className="text-3xl font-bold text-slate-800">
+              {stats.completed}
+            </span>
+            <div className="rounded-xl bg-emerald-100 p-2 text-emerald-600">
+              <CheckCircle2 className="h-5 w-5" />
+            </div>
           </div>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <p className="text-sm text-slate-500">En cours</p>
           <div className="mt-3 flex items-center justify-between">
-            <span className="text-3xl font-bold text-slate-800">{stats.inProgress}</span>
-            <div className="rounded-xl bg-blue-100 p-2 text-blue-600"><Clock3 className="h-5 w-5" /></div>
+            <span className="text-3xl font-bold text-slate-800">
+              {stats.inProgress}
+            </span>
+            <div className="rounded-xl bg-blue-100 p-2 text-blue-600">
+              <Clock3 className="h-5 w-5" />
+            </div>
           </div>
         </div>
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
           <p className="text-sm text-slate-500">À venir</p>
           <div className="mt-3 flex items-center justify-between">
-            <span className="text-3xl font-bold text-slate-800">{stats.upcoming}</span>
-            <div className="rounded-xl bg-amber-100 p-2 text-amber-600"><Swords className="h-5 w-5" /></div>
+            <span className="text-3xl font-bold text-slate-800">
+              {stats.upcoming}
+            </span>
+            <div className="rounded-xl bg-amber-100 p-2 text-amber-600">
+              <Swords className="h-5 w-5" />
+            </div>
           </div>
         </div>
       </div>
@@ -115,7 +136,9 @@ export default function AdminCourses() {
             >
               <option value="all">Tous</option>
               {uniqueSemesters.map((item) => (
-                <option key={item} value={item}>{item}</option>
+                <option key={item} value={item}>
+                  {item}
+                </option>
               ))}
             </select>
           </div>
@@ -150,30 +173,42 @@ export default function AdminCourses() {
                 <div>
                   <div className="flex items-start justify-between gap-3">
                     <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-white text-2xl shadow-sm">
-                      {course.icon || <BookOpen className="h-6 w-6 text-blue-600" />}
+                      {course.icon || (
+                        <BookOpen className="h-6 w-6 text-blue-600" />
+                      )}
                     </div>
-                    <span className={`inline-flex rounded-full px-2.5 py-1 text-[10px] font-semibold ${statusStyles[course.status] || "bg-slate-100 text-slate-700"}`}>
+                    <span
+                      className={`inline-flex rounded-full px-2.5 py-1 text-[10px] font-semibold ${statusStyles[course.status] || "bg-slate-100 text-slate-700"}`}
+                    >
                       {statusLabel[course.status] || course.status}
                     </span>
                   </div>
 
                   <div className="mt-4">
-                    <p className="text-lg font-semibold text-slate-800">{course.title}</p>
+                    <p className="text-lg font-semibold text-slate-800">
+                      {course.title}
+                    </p>
                     <p className="mt-1 text-sm text-slate-500">{course.code}</p>
                   </div>
 
                   <div className="mt-4 space-y-2 text-sm text-slate-600">
                     <div className="flex items-center justify-between">
                       <span>Professeur</span>
-                      <span className="font-medium text-slate-700">{course.professor || "Non assigné"}</span>
+                      <span className="font-medium text-slate-700">
+                        {course.professor || "Non assigné"}
+                      </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span>Crédits</span>
-                      <span className="font-medium text-slate-700">{course.credits || "-"}</span>
+                      <span className="font-medium text-slate-700">
+                        {course.credits || "-"}
+                      </span>
                     </div>
                     <div className="flex items-center justify-between">
                       <span>Semestre</span>
-                      <span className="font-medium text-slate-700">{course.semester || "-"}</span>
+                      <span className="font-medium text-slate-700">
+                        {course.semester || "-"}
+                      </span>
                     </div>
                   </div>
                 </div>
@@ -185,8 +220,18 @@ export default function AdminCourses() {
         <div className="mt-4 flex items-center justify-between text-sm text-slate-500">
           <span>{filteredCourses.length} cours affiché(s)</span>
           <div className="flex gap-2">
-            <button type="button" className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 hover:bg-slate-50">Précédent</button>
-            <button type="button" className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 hover:bg-slate-50">Suivant</button>
+            <button
+              type="button"
+              className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 hover:bg-slate-50"
+            >
+              Précédent
+            </button>
+            <button
+              type="button"
+              className="rounded-lg border border-slate-200 bg-white px-3 py-1.5 hover:bg-slate-50"
+            >
+              Suivant
+            </button>
           </div>
         </div>
       </div>

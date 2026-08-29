@@ -8,7 +8,7 @@ import {
   ArrowRight,
   ShieldCheck,
 } from "lucide-react";
-import api from "../api/client"; // <- Point vers le fichier central unique
+import api from "../api/client";
 const CONTAINER_STYLE =
   "min-h-screen flex items-center justify-center bg-amber-50/40 p-4 relative overflow-hidden font-sans";
 const DECORATIVE_CIRCLE_TOP =
@@ -76,17 +76,15 @@ export const Login = ({ onLoginSuccess }) => {
     setError(null);
     setLoading(true);
     try {
-      const response = await api.post('/auth/login', { email, password });
+      const response = await api.post("/auth/login", { email, password });
       const data = response.data;
-
-      // Le stockage localStorage et la mise à jour de l'état sont
-      // désormais gérés uniquement par AuthContext.login(token, user)
-      // pour éviter tout second appel API dans handleLoginSuccess.
       if (onLoginSuccess) {
         onLoginSuccess(data.token, data.user);
       }
     } catch (err) {
-      setError(err.response?.data?.message || err.message || "Erreur de connexion");
+      setError(
+        err.response?.data?.message || err.message || "Erreur de connexion",
+      );
     } finally {
       setLoading(false);
     }

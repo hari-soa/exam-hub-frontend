@@ -1,6 +1,12 @@
 import { useMemo, useState } from "react";
-import { AlertTriangle, Sparkles, TrendingDown, Search, Loader2 } from "lucide-react";
-import useFetch from "../hooks/useFetch"; // Ajustez le chemin selon l'emplacement de votre fichier useFetch
+import {
+  AlertTriangle,
+  Sparkles,
+  TrendingDown,
+  Search,
+  Loader2,
+} from "lucide-react";
+import useFetch from "../hooks/useFetch";
 
 const statusStyles = {
   available: "bg-emerald-100 text-emerald-700",
@@ -15,7 +21,11 @@ const statusLabels = {
 };
 
 export default function AdminExamHistory() {
-  const { data: examHistoryData, loading, error } = useFetch("/admin/exams/history");
+  const {
+    data: examHistoryData,
+    loading,
+    error,
+  } = useFetch("/admin/exams/history");
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [semesterFilter, setSemesterFilter] = useState("all");
@@ -26,7 +36,9 @@ export default function AdminExamHistory() {
     if (!exams.length) return [];
 
     const databaseExam = exams.find((exam) => exam.courseCode === "DB-220");
-    const disabledCount = exams.filter((exam) => exam.status === "disabled" && exam.attempts === 0).length;
+    const disabledCount = exams.filter(
+      (exam) => exam.status === "disabled" && exam.attempts === 0,
+    ).length;
     const algorithmicExam = exams.find((exam) => exam.courseCode === "CS-101");
 
     return [
@@ -41,9 +53,10 @@ export default function AdminExamHistory() {
       {
         kind: "info",
         title: "Optimisation",
-        description: disabledCount > 0
-          ? `${disabledCount} examen(s) sont actuellement désactivés mais n'ont reçu aucune tentative. Pensez à les archiver ou à modifier leur fenêtre de disponibilité.`
-          : "Aucun examen désactivé ne reste sans tentative. Le portefeuille d'examens est bien équilibré.",
+        description:
+          disabledCount > 0
+            ? `${disabledCount} examen(s) sont actuellement désactivés mais n'ont reçu aucune tentative. Pensez à les archiver ou à modifier leur fenêtre de disponibilité.`
+            : "Aucun examen désactivé ne reste sans tentative. Le portefeuille d'examens est bien équilibré.",
         icon: AlertTriangle,
       },
       {
@@ -64,8 +77,10 @@ export default function AdminExamHistory() {
         exam.courseCode.toLowerCase().includes(search.toLowerCase()) ||
         exam.course.toLowerCase().includes(search.toLowerCase());
 
-      const matchesStatus = statusFilter === "all" || exam.status === statusFilter;
-      const matchesSemester = semesterFilter === "all" || exam.semester === semesterFilter;
+      const matchesStatus =
+        statusFilter === "all" || exam.status === statusFilter;
+      const matchesSemester =
+        semesterFilter === "all" || exam.semester === semesterFilter;
 
       return matchesSearch && matchesStatus && matchesSemester;
     });
@@ -101,14 +116,19 @@ export default function AdminExamHistory() {
       <div className="flex items-center justify-between gap-4">
         <div>
           <p className="text-sm font-medium text-blue-600">Examens</p>
-          <h2 className="mt-1 text-3xl font-bold text-slate-800">Historique complet</h2>
+          <h2 className="mt-1 text-3xl font-bold text-slate-800">
+            Historique complet
+          </h2>
         </div>
       </div>
 
       {insights.length > 0 && (
         <div className="grid gap-4 xl:grid-cols-3">
           {insights.map(({ kind, title, description, icon: Icon }) => (
-            <div key={title} className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm">
+            <div
+              key={title}
+              className="rounded-2xl border border-slate-100 bg-white p-5 shadow-sm"
+            >
               <div className="mb-3 flex items-center gap-3">
                 <div
                   className={`flex h-10 w-10 items-center justify-center rounded-xl ${
@@ -121,7 +141,9 @@ export default function AdminExamHistory() {
                 >
                   <Icon className="h-4 w-4" />
                 </div>
-                <span className="text-sm font-semibold text-slate-800">{title}</span>
+                <span className="text-sm font-semibold text-slate-800">
+                  {title}
+                </span>
               </div>
               <p className="text-sm leading-6 text-slate-600">{description}</p>
             </div>
@@ -161,7 +183,9 @@ export default function AdminExamHistory() {
             >
               <option value="all">Tous les semestres</option>
               {uniqueSemesters.map((semester) => (
-                <option key={semester} value={semester}>{semester}</option>
+                <option key={semester} value={semester}>
+                  {semester}
+                </option>
               ))}
             </select>
           </div>
@@ -171,38 +195,74 @@ export default function AdminExamHistory() {
           <table className="min-w-full divide-y divide-slate-200 text-left">
             <thead className="bg-slate-50 text-sm text-slate-600">
               <tr>
-                <th className="px-6 py-4 font-medium whitespace-nowrap">Examen</th>
-                <th className="px-6 py-4 font-medium whitespace-nowrap">Code du cours</th>
-                <th className="px-6 py-4 font-medium whitespace-nowrap">Date</th>
-                <th className="px-6 py-4 font-medium whitespace-nowrap text-center">Tentatives</th>
-                <th className="px-6 py-4 font-medium whitespace-nowrap min-w-[150px]">Taux de réussite</th>
-                <th className="px-6 py-4 font-medium whitespace-nowrap">Semestre</th>
-                <th className="px-6 py-4 font-medium whitespace-nowrap">Statut</th>
+                <th className="px-6 py-4 font-medium whitespace-nowrap">
+                  Examen
+                </th>
+                <th className="px-6 py-4 font-medium whitespace-nowrap">
+                  Code du cours
+                </th>
+                <th className="px-6 py-4 font-medium whitespace-nowrap">
+                  Date
+                </th>
+                <th className="px-6 py-4 font-medium whitespace-nowrap text-center">
+                  Tentatives
+                </th>
+                <th className="px-6 py-4 font-medium whitespace-nowrap min-w-[150px]">
+                  Taux de réussite
+                </th>
+                <th className="px-6 py-4 font-medium whitespace-nowrap">
+                  Semestre
+                </th>
+                <th className="px-6 py-4 font-medium whitespace-nowrap">
+                  Statut
+                </th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-200 bg-white text-sm text-slate-700">
               {filteredExams.map((exam) => (
-                <tr key={exam.id} className="hover:bg-slate-50 transition-colors">
+                <tr
+                  key={exam.id}
+                  className="hover:bg-slate-50 transition-colors"
+                >
                   <td className="px-6 py-4 align-middle">
                     <div>
-                      <p className="font-semibold text-slate-800">{exam.title}</p>
-                      <p className="mt-1 text-xs text-slate-500">{exam.course}</p>
+                      <p className="font-semibold text-slate-800">
+                        {exam.title}
+                      </p>
+                      <p className="mt-1 text-xs text-slate-500">
+                        {exam.course}
+                      </p>
                     </div>
                   </td>
-                  <td className="px-6 py-4 align-middle font-medium text-slate-600">{exam.courseCode}</td>
-                  <td className="px-6 py-4 align-middle whitespace-nowrap">{exam.date}</td>
-                  <td className="px-6 py-4 align-middle text-center">{exam.attempts}</td>
+                  <td className="px-6 py-4 align-middle font-medium text-slate-600">
+                    {exam.courseCode}
+                  </td>
+                  <td className="px-6 py-4 align-middle whitespace-nowrap">
+                    {exam.date}
+                  </td>
+                  <td className="px-6 py-4 align-middle text-center">
+                    {exam.attempts}
+                  </td>
                   <td className="px-6 py-4 align-middle">
                     <div className="flex items-center gap-3">
                       <div className="h-2.5 w-full max-w-[100px] overflow-hidden rounded-full bg-slate-100">
-                        <div className="h-full rounded-full bg-blue-500" style={{ width: `${exam.successRate}%` }} />
+                        <div
+                          className="h-full rounded-full bg-blue-500"
+                          style={{ width: `${exam.successRate}%` }}
+                        />
                       </div>
-                      <span className="font-medium text-slate-700">{exam.successRate}%</span>
+                      <span className="font-medium text-slate-700">
+                        {exam.successRate}%
+                      </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 align-middle text-slate-600 whitespace-nowrap">{exam.semester}</td>
+                  <td className="px-6 py-4 align-middle text-slate-600 whitespace-nowrap">
+                    {exam.semester}
+                  </td>
                   <td className="px-6 py-4 align-middle whitespace-nowrap">
-                    <span className={`inline-flex rounded-full px-2.5 py-1 text-[10px] font-semibold ${statusStyles[exam.status] || "bg-slate-100 text-slate-700"}`}>
+                    <span
+                      className={`inline-flex rounded-full px-2.5 py-1 text-[10px] font-semibold ${statusStyles[exam.status] || "bg-slate-100 text-slate-700"}`}
+                    >
                       {statusLabels[exam.status] || exam.status}
                     </span>
                   </td>

@@ -9,15 +9,18 @@ import {
   Target,
   HelpCircle,
   BookOpen,
-  Loader2
+  Loader2,
 } from "lucide-react";
-import useFetch from "../hooks/useFetch"; // Ajustez le chemin selon votre structure
+import useFetch from "../hooks/useFetch";
 
 export default function StudentExamResult() {
   const { examId } = useParams();
 
-  // Appel API pour récupérer le résultat et la copie corrigée de l'étudiant
-  const { data: resultData, loading, error } = useFetch(`/exams/${examId}/result`);
+  const {
+    data: resultData,
+    loading,
+    error,
+  } = useFetch(`/exams/${examId}/result`);
 
   const result = resultData?.result || resultData;
 
@@ -38,9 +41,12 @@ export default function StudentExamResult() {
         <div className="rounded-full bg-slate-100 p-4 text-slate-400 mb-3">
           <HelpCircle className="h-8 w-8" />
         </div>
-        <h3 className="text-lg font-bold text-slate-800">Résultat introuvable</h3>
+        <h3 className="text-lg font-bold text-slate-800">
+          Résultat introuvable
+        </h3>
         <p className="mt-1 text-sm text-slate-500 max-w-sm">
-          Aucun résultat n'est disponible pour cet examen ou le lien est invalide.
+          Aucun résultat n'est disponible pour cet examen ou le lien est
+          invalide.
         </p>
         <Link
           to="/student/results"
@@ -52,15 +58,18 @@ export default function StudentExamResult() {
     );
   }
 
-  // Normalisation des données pour tolérer les variations de nomenclature du backend
   const examTitle = result.examTitle || result.title || "Examen";
   const score = result.score ?? result.note ?? 0;
   const total = result.total ?? 20;
   const percentage = result.percentage ?? Math.round((score / total) * 100);
-  const isPassed = result.passed ?? (score >= 10);
-  const attemptedAt = result.attemptedAt || result.submittedAt 
-    ? new Date(result.attemptedAt || result.submittedAt).toLocaleString("fr-FR", { dateStyle: "medium", timeStyle: "short" }) 
-    : "N/A";
+  const isPassed = result.passed ?? score >= 10;
+  const attemptedAt =
+    result.attemptedAt || result.submittedAt
+      ? new Date(result.attemptedAt || result.submittedAt).toLocaleString(
+          "fr-FR",
+          { dateStyle: "medium", timeStyle: "short" },
+        )
+      : "N/A";
   const questions = result.questions || result.responses || [];
 
   return (
@@ -92,7 +101,11 @@ export default function StudentExamResult() {
                   : "bg-rose-50 text-rose-700 border-rose-200/60"
               }`}
             >
-              {isPassed ? <CheckCircle2 className="h-4 w-4 text-emerald-600" /> : <XCircle className="h-4 w-4 text-rose-600" />}
+              {isPassed ? (
+                <CheckCircle2 className="h-4 w-4 text-emerald-600" />
+              ) : (
+                <XCircle className="h-4 w-4 text-rose-600" />
+              )}
               <span>{isPassed ? "Examen Réussi" : "À retravailler"}</span>
             </div>
           </div>
@@ -100,29 +113,43 @@ export default function StudentExamResult() {
           <div className="mt-6 grid gap-4 sm:grid-cols-3">
             <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-4">
               <div className="flex items-center justify-between text-slate-500 mb-1">
-                <span className="text-xs font-semibold uppercase tracking-wider">Note globale</span>
+                <span className="text-xs font-semibold uppercase tracking-wider">
+                  Note globale
+                </span>
                 <Award className="h-4 w-4 text-slate-400" />
               </div>
               <div className="flex items-baseline gap-1">
-                <span className="text-2xl font-extrabold text-slate-900">{score}</span>
-                <span className="text-sm font-medium text-slate-400">/ {total} pts</span>
+                <span className="text-2xl font-extrabold text-slate-900">
+                  {score}
+                </span>
+                <span className="text-sm font-medium text-slate-400">
+                  / {total} pts
+                </span>
               </div>
             </div>
 
             <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-4">
               <div className="flex items-center justify-between text-slate-500 mb-1">
-                <span className="text-xs font-semibold uppercase tracking-wider">Pourcentage</span>
+                <span className="text-xs font-semibold uppercase tracking-wider">
+                  Pourcentage
+                </span>
                 <Target className="h-4 w-4 text-slate-400" />
               </div>
-              <p className="text-2xl font-extrabold text-slate-900">{percentage}%</p>
+              <p className="text-2xl font-extrabold text-slate-900">
+                {percentage}%
+              </p>
             </div>
 
             <div className="rounded-xl border border-slate-100 bg-slate-50/50 p-4">
               <div className="flex items-center justify-between text-slate-500 mb-1">
-                <span className="text-xs font-semibold uppercase tracking-wider">Date de passage</span>
+                <span className="text-xs font-semibold uppercase tracking-wider">
+                  Date de passage
+                </span>
                 <Calendar className="h-4 w-4 text-slate-400" />
               </div>
-              <p className="text-base font-bold text-slate-800 mt-1">{attemptedAt}</p>
+              <p className="text-base font-bold text-slate-800 mt-1">
+                {attemptedAt}
+              </p>
             </div>
           </div>
         </div>
@@ -139,10 +166,15 @@ export default function StudentExamResult() {
           {questions.map((question, index) => {
             const isCorrect = question.isCorrect;
             const qText = question.text || question.statement;
-            const selectedOpt = question.selected || question.selectedChoiceText;
+            const selectedOpt =
+              question.selected || question.selectedChoiceText;
             const correctOpt = question.correct || question.correctChoiceText;
             const pointsEarned = question.points ?? question.pointsEarned ?? 0;
-            const maxPoints = question.maxPoints ?? question.pointsPossible ?? question.points ?? 1;
+            const maxPoints =
+              question.maxPoints ??
+              question.pointsPossible ??
+              question.points ??
+              1;
 
             return (
               <div
@@ -193,7 +225,9 @@ export default function StudentExamResult() {
                     <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500 mb-1">
                       Votre réponse
                     </p>
-                    <p className="text-sm font-semibold">{selectedOpt || "Aucune réponse"}</p>
+                    <p className="text-sm font-semibold">
+                      {selectedOpt || "Aucune réponse"}
+                    </p>
                   </div>
 
                   <div className="rounded-xl border border-emerald-200/60 bg-emerald-50/40 p-3.5 text-emerald-900">

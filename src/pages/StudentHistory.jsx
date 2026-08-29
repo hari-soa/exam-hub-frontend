@@ -9,12 +9,11 @@ import {
   BookOpen,
   CheckCircle2,
   AlertCircle,
-  Loader2
+  Loader2,
 } from "lucide-react";
-import useFetch from "../hooks/useFetch"; // Ajustez le chemin selon votre structure
+import useFetch from "../hooks/useFetch";
 
 export default function StudentHistory() {
-  // 🟢 Correction : Utilisation de l'endpoint au singulier /student/history
   const { data: historyData, loading, error } = useFetch("/student/history");
 
   const history = historyData?.history || historyData || [];
@@ -39,11 +38,17 @@ export default function StudentHistory() {
   }
 
   const totalItems = history.length;
-  
-  const average = totalItems > 0
-    ? (history.reduce((sum, item) => sum + (item.score ?? item.note ?? 0), 0) / totalItems).toFixed(1)
-    : "0.0";
-    
+
+  const average =
+    totalItems > 0
+      ? (
+          history.reduce(
+            (sum, item) => sum + (item.score ?? item.note ?? 0),
+            0,
+          ) / totalItems
+        ).toFixed(1)
+      : "0.0";
+
   const passed = history.filter((item) => {
     const status = item.status || (item.passed ? "Réussi" : "Échoué");
     const score = item.score ?? item.note ?? 0;
@@ -53,8 +58,10 @@ export default function StudentHistory() {
   const latest = totalItems > 0 ? history[0] : null;
   const latestScore = latest ? (latest.score ?? latest.note ?? 0) : 0;
   const latestTotal = latest ? (latest.total ?? 20) : 20;
-  const latestExamTitle = latest ? (latest.exam || latest.examTitle || latest.title || "Examen") : "Aucun examen";
-  const latestExamId = latest ? (latest.examId || latest.id) : "";
+  const latestExamTitle = latest
+    ? latest.exam || latest.examTitle || latest.title || "Examen"
+    : "Aucun examen";
+  const latestExamId = latest ? latest.examId || latest.id : "";
 
   return (
     <div className="space-y-8 pb-8">
@@ -68,7 +75,8 @@ export default function StudentHistory() {
             Historique des résultats
           </h2>
           <p className="text-sm text-slate-500 mt-1">
-            Consultez vos performances récentes et accédez au détail de vos copies corrigées.
+            Consultez vos performances récentes et accédez au détail de vos
+            copies corrigées.
           </p>
         </div>
       </div>
@@ -84,7 +92,9 @@ export default function StudentHistory() {
             </div>
           </div>
           <div className="mt-4 flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-slate-900">{average}</span>
+            <span className="text-3xl font-extrabold text-slate-900">
+              {average}
+            </span>
             <span className="text-base font-medium text-slate-400">/ 20</span>
           </div>
           <p className="mt-2 text-xs text-slate-500 flex items-center gap-1">
@@ -103,12 +113,17 @@ export default function StudentHistory() {
             </div>
           </div>
           <div className="mt-4 flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-slate-900">{passed}</span>
-            <span className="text-base font-medium text-slate-400">/ {totalItems}</span>
+            <span className="text-3xl font-extrabold text-slate-900">
+              {passed}
+            </span>
+            <span className="text-base font-medium text-slate-400">
+              / {totalItems}
+            </span>
           </div>
           <p className="mt-2 text-xs text-emerald-600 font-medium flex items-center gap-1">
             <CheckCircle2 className="h-3.5 w-3.5" />
-            {totalItems > 0 ? Math.round((passed / totalItems) * 100) : 0}% de réussite
+            {totalItems > 0 ? Math.round((passed / totalItems) * 100) : 0}% de
+            réussite
           </p>
         </div>
 
@@ -122,8 +137,12 @@ export default function StudentHistory() {
             </div>
           </div>
           <div className="mt-4 flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-slate-900">{latestScore}</span>
-            <span className="text-base font-medium text-slate-400">/ {latestTotal}</span>
+            <span className="text-3xl font-extrabold text-slate-900">
+              {latestScore}
+            </span>
+            <span className="text-base font-medium text-slate-400">
+              / {latestTotal}
+            </span>
           </div>
           <p className="mt-2 text-xs text-slate-500 truncate">
             {latestExamTitle}
@@ -144,9 +163,12 @@ export default function StudentHistory() {
               <div className="rounded-full bg-slate-100 p-4 text-slate-400 mb-3">
                 <AlertCircle className="h-8 w-8" />
               </div>
-              <p className="text-base font-semibold text-slate-700">Aucun résultat disponible</p>
+              <p className="text-base font-semibold text-slate-700">
+                Aucun résultat disponible
+              </p>
               <p className="text-sm text-slate-400 max-w-sm mt-1">
-                Vous n'avez pas encore passé d'épreuves ou vos notes ne sont pas encore publiées.
+                Vous n'avez pas encore passé d'épreuves ou vos notes ne sont pas
+                encore publiées.
               </p>
             </div>
           ) : (
@@ -164,11 +186,17 @@ export default function StudentHistory() {
               <tbody className="divide-y divide-slate-100 bg-white text-sm">
                 {history.map((result) => {
                   const id = result.id || result.examId;
-                  const title = result.exam || result.examTitle || result.title || "Examen";
-                  const date = result.date || (result.attemptedAt ? new Date(result.attemptedAt).toLocaleDateString("fr-FR") : "N/A");
+                  const title =
+                    result.exam || result.examTitle || result.title || "Examen";
+                  const date =
+                    result.date ||
+                    (result.attemptedAt
+                      ? new Date(result.attemptedAt).toLocaleDateString("fr-FR")
+                      : "N/A");
                   const score = result.score ?? result.note ?? 0;
                   const total = result.total ?? 20;
-                  const status = result.status || (score >= 10 ? "Réussi" : "À renforcer");
+                  const status =
+                    result.status || (score >= 10 ? "Réussi" : "À renforcer");
 
                   return (
                     <tr
@@ -184,8 +212,13 @@ export default function StudentHistory() {
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <span className="font-bold text-slate-900">{score}</span>
-                        <span className="text-slate-400 text-xs font-medium"> / {total}</span>
+                        <span className="font-bold text-slate-900">
+                          {score}
+                        </span>
+                        <span className="text-slate-400 text-xs font-medium">
+                          {" "}
+                          / {total}
+                        </span>
                       </td>
 
                       <td className="px-6 py-4 whitespace-nowrap">
@@ -194,13 +227,15 @@ export default function StudentHistory() {
                             status === "Réussi"
                               ? "bg-emerald-50 text-emerald-700 border border-emerald-200/60"
                               : status === "À renforcer"
-                              ? "bg-amber-50 text-amber-700 border border-amber-200/60"
-                              : "bg-slate-100 text-slate-700 border border-slate-200/60"
+                                ? "bg-amber-50 text-amber-700 border border-amber-200/60"
+                                : "bg-slate-100 text-slate-700 border border-slate-200/60"
                           }`}
                         >
                           <span
                             className={`h-1.5 w-1.5 rounded-full ${
-                              status === "Réussi" ? "bg-emerald-500" : "bg-amber-500"
+                              status === "Réussi"
+                                ? "bg-emerald-500"
+                                : "bg-amber-500"
                             }`}
                           />
                           {status}

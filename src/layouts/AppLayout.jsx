@@ -1,22 +1,43 @@
 import React, { useState } from "react";
 import { Outlet, NavLink } from "react-router-dom";
-import { LayoutDashboard, Users, BookOpen, User, X, ClipboardList, ShieldCheck } from "lucide-react";
+import {
+  LayoutDashboard,
+  Users,
+  BookOpen,
+  User,
+  X,
+  ClipboardList,
+  ShieldCheck,
+} from "lucide-react";
 import TopBar from "../components/TopBar";
 
 export default function AppLayout({ role }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   const adminLinks = [
-    { to: "/admin", label: "Tableau de bord", icon: LayoutDashboard, end: true },
+    {
+      to: "/admin",
+      label: "Tableau de bord",
+      icon: LayoutDashboard,
+      end: true,
+    },
     { to: "/admin/students", label: "Étudiants", icon: Users },
     { to: "/admin/cours", label: "Cours", icon: BookOpen },
     { to: "/admin/exams", label: "Examens", icon: ClipboardList, end: true },
-    { to: "/admin/exams/history", label: "Historique examens", icon: ShieldCheck },
+    {
+      to: "/admin/exams/history",
+      label: "Historique examens",
+      icon: ShieldCheck,
+    },
   ];
 
   const studentLinks = [
     { to: "/student", label: "Mes examens", icon: ClipboardList, end: true },
-    { to: "/student/results", label: "Historique & Résultats", icon: ShieldCheck },
+    {
+      to: "/student/results",
+      label: "Historique & Résultats",
+      icon: ShieldCheck,
+    },
     { to: "/student/profile", label: "Mon profil", icon: User },
   ];
 
@@ -24,7 +45,6 @@ export default function AppLayout({ role }) {
 
   return (
     <div className="flex h-screen bg-slate-50 overflow-hidden">
-      {/* Sidebar Mobile Backdrop */}
       {sidebarOpen && (
         <div
           className="fixed inset-0 z-40 bg-slate-900/50 backdrop-blur-sm lg:hidden"
@@ -43,7 +63,9 @@ export default function AppLayout({ role }) {
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 font-bold text-white shadow-sm shadow-blue-200">
               EH
             </span>
-            <span className="text-xl font-bold tracking-tight text-slate-900">ExamHub</span>
+            <span className="text-xl font-bold tracking-tight text-slate-900">
+              ExamHub
+            </span>
           </div>
           <button
             onClick={() => setSidebarOpen(false)}
@@ -88,7 +110,6 @@ export default function AppLayout({ role }) {
         </div>
       </aside>
 
-      {/* Main Content Area */}
       <div className="flex flex-1 flex-col overflow-hidden">
         <TopBar onMenuClick={() => setSidebarOpen(true)} />
 

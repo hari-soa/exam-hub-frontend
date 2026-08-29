@@ -15,11 +15,11 @@ export default function TopBar({ onMenuClick }) {
 
   const profilePath = role === "admin" ? "/admin/profile" : "/student/profile";
 
-  // Titre dynamique selon la page active
   const getPageTitle = (pathname) => {
     if (pathname.includes("/admin/students")) return "Gestion des étudiants";
     if (pathname.includes("/admin/cours")) return "Gestion des cours";
-    if (pathname.includes("/admin/exams/history")) return "Historique des examens";
+    if (pathname.includes("/admin/exams/history"))
+      return "Historique des examens";
     if (pathname.includes("/admin/exams")) return "Gestion des examens";
     if (pathname.includes("/admin")) return "Tableau de bord Admin";
     if (pathname.includes("/student/results")) return "Historique & Résultats";

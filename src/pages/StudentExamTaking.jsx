@@ -1,14 +1,29 @@
 import React, { useEffect, useState, useRef } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { Clock3, FileCheck2, HelpCircle, CheckCircle2, BookOpen, Loader2 } from "lucide-react";
+import {
+  Clock3,
+  FileCheck2,
+  HelpCircle,
+  CheckCircle2,
+  BookOpen,
+  Loader2,
+} from "lucide-react";
 import useFetch from "../hooks/useFetch";
 
 export default function StudentExamTaking() {
   const navigate = useNavigate();
   const { examId } = useParams();
 
-  const { data: examData, loading: examLoading, error: examError } = useFetch(`/exams/${examId}`);
-  const { data: questionsData, loading: questionsLoading, error: questionsError } = useFetch(`/exams/${examId}/questions`);
+  const {
+    data: examData,
+    loading: examLoading,
+    error: examError,
+  } = useFetch(`/exams/${examId}`);
+  const {
+    data: questionsData,
+    loading: questionsLoading,
+    error: questionsError,
+  } = useFetch(`/exams/${examId}/questions`);
 
   const exam = examData?.exam || examData;
   const questions = questionsData?.questions || questionsData || [];
@@ -21,7 +36,6 @@ export default function StudentExamTaking() {
   const [timeLeft, setTimeLeft] = useState(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Utilisation de refs pour éviter les closures caduques dans le setInterval
   const answersRef = useRef(answers);
   const isSubmittingRef = useRef(isSubmitting);
 
@@ -34,7 +48,6 @@ export default function StudentExamTaking() {
     isSubmittingRef.current = isSubmitting;
   }, [isSubmitting]);
 
-  // Initialisation du chrono
   useEffect(() => {
     if (exam && exam.duration && timeLeft === null) {
       const match = String(exam.duration).match(/(\d+)/);
@@ -46,7 +59,6 @@ export default function StudentExamTaking() {
     }
   }, [exam, timeLeft]);
 
-  // Avertissement en cas d'abandon/rafraîchissement
   useEffect(() => {
     const handleBeforeUnload = (e) => {
       if (!isSubmittingRef.current) {
@@ -63,14 +75,6 @@ export default function StudentExamTaking() {
     setIsSubmitting(true);
 
     try {
-      // Soumission réelle au backend avec answersRef.current
-      /*
-      await fetch(`/api/exams/${examId}/submit`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ answers: answersRef.current }),
-      });
-      */
       sessionStorage.removeItem(`exam_answers_${examId}`);
       navigate(`/student/exams/${exam.id}/result`);
     } catch (err) {
@@ -79,7 +83,6 @@ export default function StudentExamTaking() {
     }
   };
 
-  // Compte à rebours
   useEffect(() => {
     if (timeLeft === null) return;
 
@@ -131,8 +134,13 @@ export default function StudentExamTaking() {
     setAnswers((current) => ({ ...current, [questionId]: optionIndex }));
   };
 
-  const answeredCount = Object.values(answers).filter((val) => val !== null && val !== undefined).length;
-  const progressPercentage = questions.length > 0 ? Math.round((answeredCount / questions.length) * 100) : 0;
+  const answeredCount = Object.values(answers).filter(
+    (val) => val !== null && val !== undefined,
+  ).length;
+  const progressPercentage =
+    questions.length > 0
+      ? Math.round((answeredCount / questions.length) * 100)
+      : 0;
   const isTimeCritical = timeLeft !== null && timeLeft < 300;
 
   return (
@@ -156,15 +164,22 @@ export default function StudentExamTaking() {
                 : "bg-slate-100 text-slate-800 border border-slate-200/60"
             }`}
           >
-            <Clock3 className={`h-4 w-4 ${isTimeCritical ? "text-rose-600" : "text-blue-600"}`} />
+            <Clock3
+              className={`h-4 w-4 ${isTimeCritical ? "text-rose-600" : "text-blue-600"}`}
+            />
             <span>Temps restant : {formatTime(timeLeft)}</span>
           </div>
         </div>
 
         <div className="mt-4">
           <div className="flex justify-between text-xs font-medium text-slate-500 mb-1">
-            <span>Progression : {answeredCount} / {questions.length} questions répondues</span>
-            <span className="font-bold text-blue-600">{progressPercentage}%</span>
+            <span>
+              Progression : {answeredCount} / {questions.length} questions
+              répondues
+            </span>
+            <span className="font-bold text-blue-600">
+              {progressPercentage}%
+            </span>
           </div>
           <div className="h-2 w-full overflow-hidden rounded-full bg-slate-100">
             <div
@@ -177,7 +192,8 @@ export default function StudentExamTaking() {
 
       <div className="space-y-6">
         {questions.map((question, questionIndex) => {
-          const isAnswered = answers[question.id] !== null && answers[question.id] !== undefined;
+          const isAnswered =
+            answers[question.id] !== null && answers[question.id] !== undefined;
           const options = question.options || question.choices || [];
           const questionText = question.text || question.statement;
 
@@ -201,9 +217,16 @@ export default function StudentExamTaking() {
                 {questionText}
               </p>
 
-              <div className="space-y-3" role="radiogroup" aria-label={`Question ${questionIndex + 1}`}>
+              <div
+                className="space-y-3"
+                role="radiogroup"
+                aria-label={`Question ${questionIndex + 1}`}
+              >
                 {options.map((option, optionIndex) => {
-                  const optionText = typeof option === "string" ? option : (option.text || option.label);
+                  const optionText =
+                    typeof option === "string"
+                      ? option
+                      : option.text || option.label;
                   const isSelected = answers[question.id] === optionIndex;
 
                   return (
