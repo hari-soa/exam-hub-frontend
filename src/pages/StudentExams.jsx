@@ -1,19 +1,21 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Clock3, ShieldCheck, Lock, Loader2 } from "lucide-react";
-import useFetch from "../hooks/useFetch"; // Ajustez le chemin selon votre structure
+import { Clock3, ShieldCheck, Lock, Loader2, AlertCircle } from "lucide-react";
+import useFetch from "../hooks/useFetch";
 
 const statusStyles = {
-    Ouvert: "bg-emerald-100 text-emerald-700",
+    Open: "bg-emerald-100 text-emerald-700",
     "À venir": "bg-amber-100 text-amber-700",
+    Upcoming: "bg-amber-100 text-amber-700",
+    Closed: "bg-slate-100 text-slate-700",
     Terminé: "bg-slate-100 text-slate-700",
+    Ouvert: "bg-emerald-100 text-emerald-700",
     open: "bg-emerald-100 text-emerald-700",
     upcoming: "bg-amber-100 text-amber-700",
     closed: "bg-slate-100 text-slate-700",
 };
 
 export default function StudentExams() {
-    // Appel API backend pour récupérer la liste des examens disponibles
     const { data: examsData, loading, error } = useFetch("/exams");
 
     const exams = examsData?.exams || examsData || [];
@@ -23,7 +25,7 @@ export default function StudentExams() {
             <div className="flex min-h-[400px] items-center justify-center p-8">
                 <div className="flex items-center gap-3 text-slate-500">
                     <Loader2 className="h-6 w-6 animate-spin text-blue-600" />
-                    <span>Chargement des examens disponibles...</span>
+                    <span>Loading available exams...</span>
                 </div>
             </div>
         );
@@ -31,41 +33,45 @@ export default function StudentExams() {
 
     if (error) {
         return (
-            <div className="rounded-2xl border border-rose-200 bg-rose-50 p-8 text-rose-700 shadow-sm">
-                Erreur lors du chargement des examens. Veuillez réessayer plus tard.
+            <div className="rounded-2xl border border-rose-200 bg-rose-50 p-8 text-rose-700 shadow-sm flex items-center gap-3">
+                <AlertCircle className="h-5 w-5 shrink-0" />
+                <span>Error loading exams. Please try again later.</span>
             </div>
         );
     }
 
     const openExamsCount = exams.filter((exam) => {
         const status = exam.status;
-        return status === "Ouvert" || status === "open";
+        return status === "Ouvert" || status === "open" || status === "Open";
     }).length;
 
     return (
         <div className="space-y-6">
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <p className="text-sm font-medium text-blue-600">Examens</p>
-                    <h2 className="mt-1 text-3xl font-bold text-slate-800">Examens disponibles</h2>
+                    <p className="text-sm font-medium text-blue-600">Exams</p>
+                    <h2 className="mt-1 text-3xl font-bold text-slate-800">Available Exams</h2>
                 </div>
                 <div className="flex w-fit items-center gap-2 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700">
                     <ShieldCheck className="h-4 w-4 text-emerald-600" />
-                    <span>{openExamsCount} {openExamsCount > 1 ? "évaluations ouvertes" : "évaluation ouverte"}</span>
+                    <span>{openExamsCount} {openExamsCount === 1 ? "open assessment" : "open assessments"}</span>
                 </div>
             </div>
 
             {exams.length === 0 ? (
                 <div className="rounded-2xl border border-slate-200 bg-white p-8 text-center text-slate-500 shadow-sm">
-                    Aucun examen n'est disponible pour le moment.
+                    No exams available at the moment.
                 </div>
             ) : (
                 <div className="grid gap-4 lg:grid-cols-2">
                     {exams.map((exam) => {
-                        const status = exam.status || "Terminé";
-                        const isOpen = status === "Ouvert" || status === "open";
+                        const rawStatus = exam.status || "Closed";
+                        const isOpen = rawStatus === "Ouvert" || rawStatus === "open" || rawStatus === "Open";
+                        const isUpcoming = rawStatus === "À venir" || rawStatus === "upcoming" || rawStatus === "Upcoming";
+
+                        const displayStatus = isOpen ? "Open" : isUpcoming ? "Upcoming" : "Closed";
                         const moduleName = exam.module || exam.category || "Module";
-                        const title = exam.title || "Examen sans titre";
+                        const title = exam.title || "Untitled Exam";
                         const description = exam.description || "";
                         const duration = exam.duration || "N/A";
                         const difficulty = exam.difficulty || "Standard";
@@ -81,10 +87,10 @@ export default function StudentExams() {
                                         </span>
                                         <span
                                             className={`inline-flex rounded-full px-2.5 py-1 text-[10px] font-semibold ${
-                                                statusStyles[status] || "bg-slate-100 text-slate-600"
+                                                statusStyles[displayStatus] || statusStyles[rawStatus] || "bg-slate-100 text-slate-600"
                                             }`}
                                         >
-                                            {status}
+                                            {displayStatus}
                                         </span>
                                     </div>
 
@@ -93,11 +99,11 @@ export default function StudentExams() {
 
                                     <div className="mt-4 grid gap-3 sm:grid-cols-3">
                                         <div className="rounded-xl bg-slate-50 p-3">
-                                            <p className="text-xs text-slate-500">Durée</p>
+                                            <p className="text-xs text-slate-500">Duration</p>
                                             <p className="mt-1 font-semibold text-slate-800">{duration}</p>
                                         </div>
                                         <div className="rounded-xl bg-slate-50 p-3">
-                                            <p className="text-xs text-slate-500">Niveau</p>
+                                            <p className="text-xs text-slate-500">Difficulty</p>
                                             <p className="mt-1 font-semibold text-slate-800">{difficulty}</p>
                                         </div>
                                         <div className="rounded-xl bg-slate-50 p-3">
@@ -116,14 +122,14 @@ export default function StudentExams() {
                                     {isOpen ? (
                                         <Link
                                             to={`/student/exams/${exam.id}`}
-                                            className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 active:scale-95"
+                                            className="inline-flex items-center justify-center rounded-xl bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700 active:scale-95 cursor-pointer shadow-sm"
                                         >
-                                            Commencer
+                                            Start
                                         </Link>
                                     ) : (
                                         <span className="inline-flex items-center gap-1.5 rounded-xl bg-slate-100 px-3 py-2 text-sm font-medium text-slate-400 cursor-not-allowed">
                                             <Lock className="h-3.5 w-3.5" />
-                                            Indisponible
+                                            Unavailable
                                         </span>
                                     )}
                                 </div>
